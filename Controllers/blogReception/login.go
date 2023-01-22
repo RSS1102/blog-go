@@ -1,6 +1,7 @@
 package blogReception
 
 import (
+	Jwt "blog-go/Config"
 	User "blog-go/Models"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -31,8 +32,18 @@ func Login(context *gin.Context) {
 		})
 		return
 	}
+	tokenString, err := Jwt.GenerateJwt(username)
+	if err != nil {
+		context.JSON(http.StatusOK, gin.H{
+			"code":    "401",
+			"message": "token错误，请重新登陆",
+		})
+		return
+	}
+
 	context.JSON(http.StatusOK, gin.H{
+		"code":    200,
+		"Token":   tokenString,
 		"message": "登陆成功",
 	})
-	//}
 }
