@@ -14,10 +14,12 @@ func RouterInit() {
 	{
 		v1.POST("/s", blogBackstage.Hello)
 	}
+	//admin登陆
 	v2 := router.Group("/admin")
 	{
-		v2.GET("/login", blogReception.Login)
+		v2.POST("/login", blogReception.Login)
 	}
+	//admin内部操作
 	v3 := router.Group("/admin", Middlewares.JWTAuthMiddleware())
 	{
 		v3.GET("/hello", blogBackstage.Hello)
