@@ -11,10 +11,10 @@ import (
 // JWTAuthMiddleware JWT中间件
 func JWTAuthMiddleware() func(c *gin.Context) {
 	return func(c *gin.Context) {
-		authHeader := c.Request.Header.Get("authorization")
+		authHeader := c.Request.Header.Get("Authorization")
 		if authHeader == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
-				"code":    302,
+				"code":    401,
 				"message": "请携带Token发起请求。",
 			})
 			c.Abort()
@@ -23,7 +23,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		parts := strings.Split(authHeader, ".")
 		if len(parts) != 3 {
 			c.JSON(http.StatusUnauthorized, gin.H{
-				"code": 2004,
+				"code": 402,
 				"msg":  "请求头中auth格式有误",
 			})
 			c.Abort()
