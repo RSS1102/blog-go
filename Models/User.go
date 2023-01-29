@@ -7,8 +7,8 @@ import (
 
 type User struct {
 	ID       uint   `gorm:"primary_key"`
-	Username string `gorm:"username"`
-	Password string `gorm:"password"`
+	Username string `gorm:"username" `
+	Password string `gorm:"password" `
 }
 
 func LoginUser(username, password string) User {
