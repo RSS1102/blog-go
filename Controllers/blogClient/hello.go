@@ -1,4 +1,4 @@
-package blogBackstage
+package blogClient
 
 import (
 	Jwt "blog-go/Config"

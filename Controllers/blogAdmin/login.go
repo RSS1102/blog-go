@@ -1,4 +1,4 @@
-package blogReception
+package blogAdmin
 
 import (
 	Jwt "blog-go/Config"
@@ -38,5 +38,13 @@ func Login(context *gin.Context) {
 		"code":    200,
 		"token":   tokenString,
 		"message": "登陆成功",
+	})
+}
+
+func LoginOut(context *gin.Context) {
+
+	context.JSON(http.StatusOK, gin.H{
+		"code":    200,
+		"message": "退出成功",
 	})
 }
