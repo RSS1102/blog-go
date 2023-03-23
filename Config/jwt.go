@@ -19,12 +19,12 @@ func customClaims(username string) Claims {
 		username,
 		jwt.RegisteredClaims{
 			// A usual scenario is to set the expiration time relative to the current time
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(12 * time.Hour)), //过期时间
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)), //过期时间
 			IssuedAt:  jwt.NewNumericDate(time.Now()),                     //签发时间
 			NotBefore: jwt.NewNumericDate(time.Now()),                     //生效时间
 			Issuer:    "Jimmy",                                            //签发者
 			Subject:   "bolg",                                             //签发主题
-			ID:        "1",                                                //
+			ID:        username,                                           //
 			Audience:  []string{username},                                 //接收者
 		},
 	}
