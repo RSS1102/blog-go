@@ -1,8 +1,9 @@
-package blogAdmin
+package controlAdmin
 
 import (
 	Jwt "blog-go/Config"
-	User "blog-go/Models"
+	User "blog-go/Models/modelsBlogs"
+	"blog-go/Services/blogs/servicesAdmin"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -17,7 +18,7 @@ func Login(context *gin.Context) {
 		})
 		return
 	}
-	user := User.LoginUser(data.Username, data.Password)
+	user := servicesAdmin.SelectUser(data.Username, data.Password)
 	fmt.Println(user.ID)
 	if user.ID < 1 {
 		context.JSON(http.StatusBadRequest, gin.H{
