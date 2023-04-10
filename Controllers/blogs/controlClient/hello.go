@@ -1,4 +1,4 @@
-package blogClient
+package controlClient
 
 import (
 	Jwt "blog-go/Config"

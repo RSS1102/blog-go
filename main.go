@@ -2,10 +2,10 @@ package main
 
 import (
 	Init "blog-go/Config"
-	"blog-go/routers"
+	"blog-go/Routers"
 )
 
 func main() {
 	Init.DBInit()
-	routers.RouterInit()
+	Routers.RouterInit()
 }
