@@ -13,7 +13,7 @@ func Login(context *gin.Context) {
 	var data User.User
 	err := context.ShouldBindJSON(&data)
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{
+		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": err.Error(),
 		})
 		return
