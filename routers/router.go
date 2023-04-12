@@ -13,7 +13,7 @@ func RouterInit() {
 	//client展示
 	v1 := router.Group("/client")
 	{
-		v1.POST("/s", controlClient.Hello)
+		v1.POST("hello", controlClient.Hello)
 	}
 	//admin登陆
 	admin1 := router.Group("/admin")
@@ -24,7 +24,11 @@ func RouterInit() {
 	admin2 := router.Group("/admin", Middlewares.JWTAuthMiddleware())
 	{
 		admin2.POST("/login_out", controlAdmin.LoginOut)
-		admin2.POST("/add_group", controlAdmin.AddGroup)
+		//group
+		admin2.POST("/create_group", controlAdmin.CreateGroup)
+		admin2.POST("/update_group", controlAdmin.UpdateGroup)
+		admin2.POST("/delete_group", controlAdmin.DeleteGroup)
+		admin2.POST("/select_group", controlAdmin.SelectGroup)
 	}
 	if err := router.Run(); err != nil {
 		fmt.Printf("startup service failed, err:%v\n\n", err)
