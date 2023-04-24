@@ -1,14 +1,14 @@
 package controlAdmin
 
 import (
-	Group "blog-go/Models/modelsBlogs"
+	"blog-go/Models/modelsBlogs"
 	"blog-go/Services/blogs/servicesAdmin"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 func CreateGroup(context *gin.Context) {
-	var data Group.BlogGroups
+	var data modelsBlogs.BlogGroups
 	err := context.ShouldBindJSON(&data)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
@@ -30,7 +30,7 @@ func CreateGroup(context *gin.Context) {
 	}
 }
 func UpdateGroup(context *gin.Context) {
-	var data Group.BlogGroups
+	var data modelsBlogs.BlogGroups
 	err := context.ShouldBindJSON(&data)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
@@ -52,7 +52,7 @@ func UpdateGroup(context *gin.Context) {
 	}
 }
 func DeleteGroup(context *gin.Context) {
-	var data Group.BlogGroups
+	var data modelsBlogs.BlogGroups
 	err := context.ShouldBindJSON(&data)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{

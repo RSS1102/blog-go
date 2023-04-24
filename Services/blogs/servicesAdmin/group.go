@@ -9,12 +9,11 @@ import (
 
 // CreateGroup 创建分组
 func CreateGroup(group string) int64 {
-	now := time.Now()
 	var newGroup = modelsBlogs.BlogGroups{
 		Group:    group,
 		IsShow:   true,
-		CreateAt: now,
-		UpdateAt: now,
+		CreateAt: time.Now(),
+		UpdateAt: time.Now(),
 	}
 
 	result := Init.DB.Create(&newGroup)
@@ -27,8 +26,7 @@ func CreateGroup(group string) int64 {
 
 // DeleteGroup 删除分组
 func DeleteGroup(id uint) int64 {
-	now := time.Now()
-	result := Init.DB.Table("blog_groups").Where("id=?", id).Updates(modelsBlogs.BlogGroups{IsShow: false, UpdateAt: now})
+	result := Init.DB.Table("blog_groups").Where("id=?", id).Updates(modelsBlogs.BlogGroups{IsShow: false, UpdateAt: time.Now()})
 	println(result)
 	if result.Error != nil {
 		log.Println("DeleteGroup group fail : ", result)
@@ -38,8 +36,7 @@ func DeleteGroup(id uint) int64 {
 
 // UpdateGroup 分组更新
 func UpdateGroup(id uint, group string) int64 {
-	now := time.Now()
-	result := Init.DB.Table("blog_groups").Where("id=?", id).Updates(modelsBlogs.BlogGroups{Group: group, UpdateAt: now})
+	result := Init.DB.Table("blog_groups").Where("id=?", id).Updates(modelsBlogs.BlogGroups{Group: group, UpdateAt: time.Now()})
 	println(result)
 	if result.Error != nil {
 		log.Println("UpdateGroup group fail : ", result)
