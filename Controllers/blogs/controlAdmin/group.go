@@ -1,14 +1,15 @@
 package controlAdmin
 
 import (
-	"blog-go/Models/modelsBlogs"
+	"blog-go/Models/modelAdmin"
+	"blog-go/Models/modelPublic"
 	"blog-go/Services/blogs/servicesAdmin"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 func CreateGroup(context *gin.Context) {
-	var data modelsBlogs.BlogGroups
+	var data modelAdmin.BlogGroups
 	err := context.ShouldBindJSON(&data)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
@@ -30,7 +31,7 @@ func CreateGroup(context *gin.Context) {
 	}
 }
 func UpdateGroup(context *gin.Context) {
-	var data modelsBlogs.BlogGroups
+	var data modelAdmin.BlogGroups
 	err := context.ShouldBindJSON(&data)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
@@ -51,36 +52,9 @@ func UpdateGroup(context *gin.Context) {
 		})
 	}
 }
-func DeleteGroup(context *gin.Context) {
-	var data modelsBlogs.BlogGroups
-	err := context.ShouldBindJSON(&data)
-	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{
-			"message": err.Error(),
-		})
-		return
-	}
-	res := servicesAdmin.DeleteGroup(data.ID)
-	if res > 0 {
-		context.JSON(http.StatusOK, gin.H{
-			"code":    200,
-			"message": "删除分组成功",
-		})
-	} else {
-		context.JSON(http.StatusBadRequest, gin.H{
-			"code":    400,
-			"message": "删除分组失败",
-		})
-	}
-}
-
-type Page struct {
-	Paging   int `json:"paging"`
-	PageSize int `json:"pageSize"`
-}
 
 func SelectGroup(context *gin.Context) {
-	var page Page
+	var page modelPublic.Page
 	err := context.ShouldBindJSON(&page)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{

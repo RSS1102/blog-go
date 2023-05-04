@@ -2,14 +2,14 @@ package servicesAdmin
 
 import (
 	Init "blog-go/Config"
-	"blog-go/Models/modelsBlogs"
+	"blog-go/Models/modelAdmin"
 	"log"
 	"time"
 )
 
 // CreateGroup 创建分组
 func CreateGroup(group string) int64 {
-	var newGroup = modelsBlogs.BlogGroups{
+	var newGroup = modelAdmin.BlogGroups{
 		Group:    group,
 		IsShow:   true,
 		CreateAt: time.Now(),
@@ -24,19 +24,9 @@ func CreateGroup(group string) int64 {
 	return result.RowsAffected
 }
 
-// DeleteGroup 删除分组
-func DeleteGroup(id uint) int64 {
-	result := Init.DB.Table("blog_groups").Where("id=?", id).Updates(modelsBlogs.BlogGroups{IsShow: false, UpdateAt: time.Now()})
-	println(result)
-	if result.Error != nil {
-		log.Println("DeleteGroup group fail : ", result)
-	}
-	return result.RowsAffected
-}
-
 // UpdateGroup 分组更新
 func UpdateGroup(id uint, group string) int64 {
-	result := Init.DB.Table("blog_groups").Where("id=?", id).Updates(modelsBlogs.BlogGroups{Group: group, UpdateAt: time.Now()})
+	result := Init.DB.Table("blog_groups").Where("id=?", id).Updates(modelAdmin.BlogGroups{Group: group, UpdateAt: time.Now()})
 	println(result)
 	if result.Error != nil {
 		log.Println("UpdateGroup group fail : ", result)
@@ -46,8 +36,8 @@ func UpdateGroup(id uint, group string) int64 {
 
 // SelectGroup 分组查询
 // 第几页
-func SelectGroup(paging int, pageSize int) []modelsBlogs.BlogGroups {
-	var blogGroups []modelsBlogs.BlogGroups
+func SelectGroup(paging int, pageSize int) []modelAdmin.BlogGroups {
+	var blogGroups []modelAdmin.BlogGroups
 	err := Init.DB.Table("blog_groups").Limit(pageSize).Offset((paging - 1) * pageSize).Find(&blogGroups)
 	if err.Error != nil {
 		log.Println("SelectContent group fail : ", err)
