@@ -17,13 +17,11 @@ func RouterInit() {
 		//group
 		v1.POST("/create_group", controlAdmin.CreateGroup)
 		v1.POST("/update_group", controlAdmin.UpdateGroup)
-		v1.POST("/delete_group", controlAdmin.DeleteGroup)
 		v1.POST("/select_group", controlAdmin.SelectGroup)
-		//content
+		//blog
 		v1.POST("/create_blog", controlAdmin.CreateBlog)
 		v1.POST("/update_blog", controlAdmin.UpdateBlog)
-		//v1.POST("/content_is-show", controlAdmin.ContentIsShow)
-		//v1.POST("/select_content", controlAdmin.SelectContent)
+		v1.POST("/select_blog", controlAdmin.SelectBlog)
 	}
 	//admin登陆
 	admin1 := router.Group("/admin")
@@ -37,13 +35,11 @@ func RouterInit() {
 		//group
 		admin2.POST("/create_group", controlAdmin.CreateGroup)
 		admin2.POST("/update_group", controlAdmin.UpdateGroup)
-		admin2.POST("/delete_group", controlAdmin.DeleteGroup)
 		admin2.POST("/select_group", controlAdmin.SelectGroup)
-		//content
+		//blog
 		admin2.POST("/create_blog", controlAdmin.CreateBlog)
 		admin2.POST("/update_blog", controlAdmin.UpdateBlog)
-		//admin2.POST("/delete_content", controlAdmin.ContentIsShow)
-		//admin2.POST("/select_content", controlAdmin.SelectContent)
+		admin2.POST("/select_blog", controlAdmin.SelectBlog)
 	}
 	if err := router.Run(); err != nil {
 		fmt.Printf("startup service failed, err:%v\n\n", err)

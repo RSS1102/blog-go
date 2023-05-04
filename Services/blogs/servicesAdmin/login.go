@@ -2,7 +2,7 @@ package servicesAdmin
 
 import (
 	Init "blog-go/Config"
-	User "blog-go/Models/modelsBlogs"
+	User "blog-go/Models/modelAdmin"
 	"log"
 )
 
