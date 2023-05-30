@@ -52,13 +52,19 @@ func UpdateBlog(id uint, groupId int, title string, content string, isShow bool)
 	return result.RowsAffected
 }
 
-// SelectBlog blog查询
-// 第几页
-func SelectBlog(paging int, pageSize int) []modelAdmin.BlogGroups {
+// SelectBlog blog查询 分页
+func SelectBlog(Current int, pageSize int) (int, []modelAdmin.BlogGroups) {
 	var blogGroups []modelAdmin.BlogGroups
-	err := Init.DB.Table("blog_blogs").Limit(pageSize).Offset((paging - 1) * pageSize).Find(&blogGroups)
-	if err.Error != nil {
-		log.Println("SelectContent group fail : ", err)
+	var total int64
+	err := Init.DB.Table("blog_blogs").Count(&total).Error
+	if err != nil {
+		log.Println("Failed to get total record count:", err)
+		return 0, nil
 	}
-	return blogGroups
+
+	errs := Init.DB.Table("blog_blogs").Limit(pageSize).Offset((Current - 1) * pageSize).Find(&blogGroups)
+	if errs.Error != nil {
+		return 0, nil
+	}
+	return int(total), blogGroups
 }

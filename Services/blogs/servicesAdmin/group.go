@@ -36,11 +36,17 @@ func UpdateGroup(id uint, group string) int64 {
 
 // SelectGroup 分组查询
 // 第几页
-func SelectGroup(paging int, pageSize int) []modelAdmin.BlogGroups {
+func SelectGroup(Current int, pageSize int) (int, []modelAdmin.BlogGroups) {
 	var blogGroups []modelAdmin.BlogGroups
-	err := Init.DB.Table("blog_groups").Limit(pageSize).Offset((paging - 1) * pageSize).Find(&blogGroups)
-	if err.Error != nil {
+	var total int64
+	err := Init.DB.Table("blog_groups").Count(&total).Error
+	if err != nil {
+		log.Println("Failed to get total record count:", err)
+		return 0, nil
+	}
+	errs := Init.DB.Table("blog_groups").Limit(pageSize).Offset((Current - 1) * pageSize).Find(&blogGroups)
+	if errs.Error != nil {
 		log.Println("SelectContent group fail : ", err)
 	}
-	return blogGroups
+	return int(total), blogGroups
 }

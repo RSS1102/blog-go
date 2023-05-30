@@ -62,18 +62,21 @@ func SelectGroup(context *gin.Context) {
 		})
 		return
 	}
-	println(page.Paging, page.PageSize)
-	res := servicesAdmin.SelectGroup(page.Paging, page.PageSize)
-	if len(res) > 0 {
+	println(page.Current, page.PageSize)
+	total, data := servicesAdmin.SelectGroup(page.Current, page.PageSize)
+	if total > 0 {
 		context.JSON(http.StatusOK, gin.H{
 			"code":    200,
 			"message": "查询成功",
-			"date":    res,
+			"data":    data,
+			"total":   total,
 		})
 	} else {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"code":    400,
 			"message": "查询失败",
+			"data":    nil,
+			"total":   0,
 		})
 	}
 }

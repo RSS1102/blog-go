@@ -1,6 +1,6 @@
 package modelPublic
 
 type Page struct {
-	Paging   int `json:"paging"`
+	Current  int `json:"current"`
 	PageSize int `json:"pageSize"`
 }
