@@ -44,6 +44,13 @@ func SelectGroup(Current int, pageSize int) (int, []modelAdmin.BlogGroups) {
 		log.Println("Failed to get total record count:", err)
 		return 0, nil
 	}
+	if Current == -1 || pageSize == -1 {
+		errs := Init.DB.Table("blog_groups").Find(&blogGroups)
+		if errs.Error != nil {
+			return 0, nil
+		}
+		return int(total), blogGroups
+	}
 	errs := Init.DB.Table("blog_groups").Limit(pageSize).Offset((Current - 1) * pageSize).Find(&blogGroups)
 	if errs.Error != nil {
 		log.Println("SelectContent group fail : ", err)
