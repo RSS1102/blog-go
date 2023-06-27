@@ -49,11 +49,15 @@ func UpdateBlog(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
 			"code":    200,
 			"message": "blog更新成功",
+			"data":    make([]int, 0),
+			"total":   0,
 		})
 	} else {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"code":    400,
 			"message": "blog更新失败",
+			"data":    make([]int, 0),
+			"total":   0,
 		})
 	}
 }
@@ -63,7 +67,10 @@ func SelectBlog(context *gin.Context) {
 	err := context.ShouldBindJSON(&page)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
 			"message": err.Error(),
+			"data":    make([]int, 0),
+			"total":   0,
 		})
 		return
 	}
@@ -73,15 +80,15 @@ func SelectBlog(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
 			"code":    200,
 			"message": "查询成功",
-			"total":   total,
 			"data":    groups,
+			"total":   total,
 		})
 	} else {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"code":    400,
 			"message": "查询失败",
+			"data":    make([]int, 0),
 			"total":   0,
-			"data":    nil,
 		})
 	}
 }

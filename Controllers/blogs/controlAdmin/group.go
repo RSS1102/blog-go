@@ -13,7 +13,9 @@ func CreateGroup(context *gin.Context) {
 	err := context.ShouldBindJSON(&data)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
 			"message": err.Error(),
+			"data":    nil,
 		})
 		return
 	}
@@ -22,11 +24,13 @@ func CreateGroup(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
 			"code":    200,
 			"message": "添加分组成功",
+			"data":    res,
 		})
 	} else {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"code":    400,
 			"message": "添加分组失败",
+			"data":    nil,
 		})
 	}
 }
@@ -35,7 +39,9 @@ func UpdateGroup(context *gin.Context) {
 	err := context.ShouldBindJSON(&data)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
 			"message": err.Error(),
+			"data":    nil,
 		})
 		return
 	}
@@ -44,11 +50,13 @@ func UpdateGroup(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
 			"code":    200,
 			"message": "更新分组成功",
+			"data":    res,
 		})
 	} else {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"code":    400,
 			"message": "更新分组失败",
+			"data":    nil,
 		})
 	}
 }
@@ -58,7 +66,10 @@ func SelectGroup(context *gin.Context) {
 	err := context.ShouldBindJSON(&page)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
+			"code":    200,
 			"message": err.Error(),
+			"data":    make([]int, 0),
+			"total":   0,
 		})
 		return
 	}

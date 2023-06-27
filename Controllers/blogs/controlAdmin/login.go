@@ -14,7 +14,9 @@ func Login(context *gin.Context) {
 	err := context.ShouldBindJSON(&data)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
+			"code":    400,
 			"message": err.Error(),
+			"token":   nil,
 		})
 		return
 	}
@@ -23,18 +25,18 @@ func Login(context *gin.Context) {
 	fmt.Println(user.ID)
 	if user.ID < 1 {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"code":    "400",
+			"code":    400,
 			"message": "你输入的账号或者密码不正确",
-			"token":   "",
+			"token":   nil,
 		})
 		return
 	}
 	tokenString, err := Jwt.GenerateJwt(data.Username)
 	if err != nil {
 		context.JSON(http.StatusUnauthorized, gin.H{
-			"code":    "401",
+			"code":    401,
 			"message": "token错误，请重新登陆",
-			"token":   "",
+			"token":   nil,
 		})
 		return
 	}
