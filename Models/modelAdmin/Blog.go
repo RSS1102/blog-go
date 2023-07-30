@@ -26,5 +26,6 @@ type BlogGroups struct {
 type User struct {
 	ID       uint   `json:"primaryKey"`
 	Username string `json:"username" `
-	Password string `json:"password" `
+	Password string `json:"password"`
+	Account  string `json:"account"`
 }
