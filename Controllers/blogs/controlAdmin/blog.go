@@ -75,12 +75,12 @@ func SelectBlog(context *gin.Context) {
 		return
 	}
 	println(page.Current, page.PageSize)
-	total, groups := servicesAdmin.SelectBlog(page.Current, page.PageSize)
+	total, blogs := servicesAdmin.SelectBlog(page.Current, page.PageSize)
 	if total > 0 {
 		context.JSON(http.StatusOK, gin.H{
 			"code":    200,
 			"message": "查询成功",
-			"data":    groups,
+			"data":    blogs,
 			"total":   total,
 		})
 	} else {

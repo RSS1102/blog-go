@@ -26,20 +26,6 @@ func CreateBlog(groupId int, title, content string) int64 {
 	return result.RowsAffected
 }
 
-//// GetBlogIsShow  查询blog是否展示
-//func GetBlogIsShow(id uint) bool {
-//	type BlogContent struct {
-//		IsShow bool
-//	}
-//	var blogContent BlogContent
-//	result := Init.DB.Table("blog_blogs").Select("is_show").Where("id= ?", id).Scan(&blogContent)
-//	println(result)
-//	if result.Error != nil {
-//		log.Println("ContentIsShow group fail : ", result)
-//	}
-//	return blogContent.IsShow
-//}
-
 // UpdateBlog blog更新
 func UpdateBlog(id uint, groupId int, title string, content string, isShow bool) int64 {
 	result := Init.DB.Table("blog_blogs").
@@ -53,8 +39,8 @@ func UpdateBlog(id uint, groupId int, title string, content string, isShow bool)
 }
 
 // SelectBlog blog查询 分页
-func SelectBlog(Current int, pageSize int) (int, []modelAdmin.BlogGroups) {
-	var blogGroups []modelAdmin.BlogGroups
+func SelectBlog(Current int, pageSize int) (int, []modelAdmin.BlogBlogs) {
+	var blogBlogs []modelAdmin.BlogBlogs
 	var total int64
 	err := Init.DB.Table("blog_blogs").Count(&total).Error
 	if err != nil {
@@ -62,9 +48,10 @@ func SelectBlog(Current int, pageSize int) (int, []modelAdmin.BlogGroups) {
 		return 0, nil
 	}
 
-	errs := Init.DB.Table("blog_blogs").Limit(pageSize).Offset((Current - 1) * pageSize).Find(&blogGroups)
+	errs := Init.DB.Table("blog_blogs").Joins("JOIN blog_groups ON blog_blogs.group_id = blog_groups.ID").
+		Limit(pageSize).Offset((Current - 1) * pageSize).Find(&blogBlogs)
 	if errs.Error != nil {
 		return 0, nil
 	}
-	return int(total), blogGroups
+	return int(total), blogBlogs
 }
