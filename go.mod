@@ -6,7 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.8.2
 	github.com/golang-jwt/jwt/v4 v4.3.0
 	gorm.io/driver/mysql v1.4.5
-	gorm.io/gorm v1.24.3
+	gorm.io/gorm v1.25.2
 )
 
 require (
