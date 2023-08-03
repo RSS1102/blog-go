@@ -39,8 +39,8 @@ func UpdateBlog(id uint, groupId int, title string, content string, isShow bool)
 }
 
 // SelectBlog blog查询 分页
-func SelectBlog(Current int, pageSize int) (int, []modelAdmin.BlogBlogs) {
-	var blogBlogs []modelAdmin.BlogBlogs
+func SelectBlog(Current int, pageSize int) (int, []modelAdmin.MergedBlogs) {
+	var blogBlogs []modelAdmin.MergedBlogs
 	var total int64
 	err := Init.DB.Table("blog_blogs").Count(&total).Error
 	if err != nil {
@@ -48,7 +48,8 @@ func SelectBlog(Current int, pageSize int) (int, []modelAdmin.BlogBlogs) {
 		return 0, nil
 	}
 
-	errs := Init.DB.Table("blog_blogs").Joins("JOIN blog_groups ON blog_blogs.group_id = blog_groups.ID").
+	errs := Init.DB.Table("blog_blogs").Joins("JOIN blog_groups ON blog_blogs.group_id = blog_groups.id").
+		Select("blog_blogs.*, blog_groups.group, blog_groups.is_show as groupIsShow").
 		Limit(pageSize).Offset((Current - 1) * pageSize).Find(&blogBlogs)
 	if errs.Error != nil {
 		return 0, nil

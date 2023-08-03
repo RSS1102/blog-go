@@ -9,8 +9,8 @@ type BlogBlogs struct {
 	GroupId  int       `json:"groupId"`
 	Title    string    `json:"title"`
 	Content  string    `json:"content"`
-	Visitors int       `json:"visitors"`
-	IsShow   bool      `json:"isShow"`
+	Visitors int       `gorm:"default:0" json:"visitors"`
+	IsShow   bool      `gorm:"default:true" json:"isShow"`
 	CreateAt time.Time `json:"createAt"`
 	UpdateAt time.Time `json:"updateAt"`
 }
@@ -18,7 +18,7 @@ type BlogBlogs struct {
 type BlogGroups struct {
 	ID       uint      `gorm:"primary_key" json:"id"`
 	Group    string    `json:"group"`
-	IsShow   bool      `json:"isShow"`
+	IsShow   bool      `gorm:"default:true" json:"isShow"`
 	CreateAt time.Time `json:"createAt"`
 	UpdateAt time.Time `json:"updateAt"`
 }
@@ -30,7 +30,9 @@ type User struct {
 	Account  string `json:"account"`
 }
 
-type MergedBlog struct {
+// MergedBlogs 连表查询 IsShow为原字段,groupIsShow为输出字段
+type MergedBlogs struct {
 	BlogBlogs
-	BlogGroup BlogGroups `gorm:"embedded"`
+	Group  string `json:"group"`
+	IsShow bool   `gorm:"default:true" json:"groupIsShow"`
 }
