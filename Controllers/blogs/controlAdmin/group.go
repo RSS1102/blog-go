@@ -45,7 +45,7 @@ func UpdateGroup(context *gin.Context) {
 		})
 		return
 	}
-	res := servicesAdmin.UpdateGroup(data.ID, data.Group)
+	res := servicesAdmin.UpdateGroup(data)
 	if res > 0 {
 		context.JSON(http.StatusOK, gin.H{
 			"code":    200,

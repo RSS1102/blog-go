@@ -3,7 +3,9 @@ package servicesAdmin
 import (
 	Init "blog-go/Config"
 	"blog-go/Models/modelAdmin"
+	Until "blog-go/Until"
 	"log"
+	"reflect"
 	"time"
 )
 
@@ -25,8 +27,18 @@ func CreateGroup(group string) int64 {
 }
 
 // UpdateGroup 分组更新
-func UpdateGroup(id uint, group string) int64 {
-	result := Init.DB.Table("blog_groups").Where("id=?", id).Updates(modelAdmin.BlogGroups{Group: group, UpdateAt: time.Now()})
+func UpdateGroup(updates modelAdmin.BlogGroups) int64 {
+	updateMap := make(map[string]interface{})
+	v := reflect.ValueOf(updates)
+	for i := 0; i < v.NumField(); i++ {
+		fieldName := v.Type().Field(i).Name
+		fieldValue := v.Field(i).Interface()
+		lowerFieldName := Until.ConvertToSnakeCase(fieldName)
+		if fieldName != "CreateAt" {
+			updateMap[lowerFieldName] = fieldValue
+		}
+	}
+	result := Init.DB.Table("blog_groups").Where("id=?", updates.ID).Updates(updateMap)
 	println(result)
 	if result.Error != nil {
 		log.Println("UpdateGroup group fail : ", result)
