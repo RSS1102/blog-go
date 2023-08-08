@@ -43,8 +43,8 @@ func UpdateBlog(context *gin.Context) {
 		})
 		return
 	}
-	println("error,message", data.GroupId)
-	res := servicesAdmin.UpdateBlog(data.ID, data.GroupId, data.Title, data.Content, data.IsShow)
+
+	res := servicesAdmin.UpdateBlog(data.ID, data)
 	if res > 0 {
 		context.JSON(http.StatusOK, gin.H{
 			"code":    200,

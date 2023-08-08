@@ -27,11 +27,35 @@ func CreateBlog(groupId int, title, content string) int64 {
 }
 
 // UpdateBlog blog更新
-func UpdateBlog(id uint, groupId int, title string, content string, isShow bool) int64 {
+func UpdateBlog(id uint, updates modelAdmin.BlogBlogs) int64 {
+
+	// 更新记录的不固定字段
+	updateData := map[string]interface{}{
+		"Title":    updates.Title,
+		"Content":  updates.Content,
+		"Visitors": updates.Visitors,
+		"IsShow":   updates.IsShow,
+		"GroupId":  updates.GroupId,
+	}
+	println(updateData)
+	// 移除未传入的字段
+	if updates.Title == "" {
+		delete(updateData, "Title")
+	}
+	if updates.Content == "" {
+		delete(updateData, "Content")
+	}
+	if updates.Visitors == 0 {
+		delete(updateData, "Visitors")
+	}
+	if updates.GroupId == 0 {
+		delete(updateData, "GroupId")
+	}
+
 	result := Init.DB.Table("blog_blogs").
+		Model(&modelAdmin.BlogBlogs{}).
 		Where("id=?", id).
-		Updates(&modelAdmin.BlogBlogs{GroupId: groupId, Title: title, Content: content, IsShow: isShow, UpdateAt: time.Now()})
-	println(result)
+		Updates(updateData)
 	if result.Error != nil {
 		log.Println("blog_blogs update fail : ", result)
 	}

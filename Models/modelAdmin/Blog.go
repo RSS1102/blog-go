@@ -33,6 +33,6 @@ type User struct {
 // MergedBlogs 连表查询 IsShow为原字段,groupIsShow为输出字段
 type MergedBlogs struct {
 	BlogBlogs
-	Group  string `json:"group"`
-	IsShow bool   `gorm:"default:true" json:"groupIsShow"`
+	Group       string `json:"group"`
+	GroupIsShow bool   `json:"groupIsShow"`
 }

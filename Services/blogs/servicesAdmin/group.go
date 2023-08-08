@@ -34,6 +34,9 @@ func UpdateGroup(updates modelAdmin.BlogGroups) int64 {
 		fieldName := v.Type().Field(i).Name
 		fieldValue := v.Field(i).Interface()
 		lowerFieldName := Until.ConvertToSnakeCase(fieldName)
+		if fieldName == "UpdateAt" {
+			updateMap[lowerFieldName] = time.Now()
+		}
 		if fieldName != "CreateAt" {
 			updateMap[lowerFieldName] = fieldValue
 		}
