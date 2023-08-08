@@ -73,7 +73,7 @@ func SelectBlog(Current int, pageSize int) (int, []modelAdmin.MergedBlogs) {
 	}
 
 	errs := Init.DB.Table("blog_blogs").Joins("JOIN blog_groups ON blog_blogs.group_id = blog_groups.id").
-		Select("blog_blogs.*, blog_groups.group, blog_groups.is_show as groupIsShow").
+		Select("blog_blogs.*, blog_groups.group, blog_groups.is_show as group_is_show").
 		Limit(pageSize).Offset((Current - 1) * pageSize).Find(&blogBlogs)
 	if errs.Error != nil {
 		return 0, nil
