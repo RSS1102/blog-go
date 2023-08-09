@@ -27,8 +27,7 @@ func CreateBlog(groupId int, title, content string) int64 {
 }
 
 // UpdateBlog blog更新
-func UpdateBlog(id uint, updates modelAdmin.BlogBlogs) int64 {
-
+func UpdateBlog(updates modelAdmin.BlogBlogs) int64 {
 	// 更新记录的不固定字段
 	updateData := map[string]interface{}{
 		"Title":    updates.Title,
@@ -54,7 +53,7 @@ func UpdateBlog(id uint, updates modelAdmin.BlogBlogs) int64 {
 
 	result := Init.DB.Table("blog_blogs").
 		Model(&modelAdmin.BlogBlogs{}).
-		Where("id=?", id).
+		Where("id=?", updates.ID).
 		Updates(updateData)
 	if result.Error != nil {
 		log.Println("blog_blogs update fail : ", result)

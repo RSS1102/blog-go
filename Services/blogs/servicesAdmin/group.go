@@ -3,9 +3,7 @@ package servicesAdmin
 import (
 	Init "blog-go/Config"
 	"blog-go/Models/modelAdmin"
-	Until "blog-go/Until"
 	"log"
-	"reflect"
 	"time"
 )
 
@@ -28,21 +26,22 @@ func CreateGroup(group string) int64 {
 
 // UpdateGroup 分组更新
 func UpdateGroup(updates modelAdmin.BlogGroups) int64 {
-	updateMap := make(map[string]interface{})
-	v := reflect.ValueOf(updates)
-	for i := 0; i < v.NumField(); i++ {
-		fieldName := v.Type().Field(i).Name
-		fieldValue := v.Field(i).Interface()
-		lowerFieldName := Until.ConvertToSnakeCase(fieldName)
-		if fieldName == "UpdateAt" {
-			updateMap[lowerFieldName] = time.Now()
-		}
-		if fieldName != "CreateAt" {
-			updateMap[lowerFieldName] = fieldValue
-		}
+	// 更新记录的不固定字段
+	updateData := map[string]interface{}{
+		"Group":  updates.Group,
+		"IsShow": updates.IsShow,
 	}
-	result := Init.DB.Table("blog_groups").Where("id=?", updates.ID).Updates(updateMap)
-	println(result)
+	println(updateData)
+	// 移除未传入的字段
+	if updates.Group == "" {
+		delete(updateData, "Group")
+	}
+
+	result := Init.DB.Table("blog_groups").
+		Model(&modelAdmin.BlogGroups{}).
+		Where("id=?", updates.ID).
+		Updates(updateData)
+	
 	if result.Error != nil {
 		log.Println("UpdateGroup group fail : ", result)
 	}

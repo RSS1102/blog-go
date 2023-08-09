@@ -44,7 +44,7 @@ func UpdateBlog(context *gin.Context) {
 		return
 	}
 
-	res := servicesAdmin.UpdateBlog(data.ID, data)
+	res := servicesAdmin.UpdateBlog(data)
 	if res > 0 {
 		context.JSON(http.StatusOK, gin.H{
 			"code":    200,
