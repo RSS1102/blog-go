@@ -24,10 +24,12 @@ type BlogGroups struct {
 }
 
 type User struct {
-	ID       uint   `gorm:"primary_key" json:"id"`
-	Username string `json:"username" `
-	Password string `json:"password"`
-	Account  string `json:"account"`
+	ID       uint      `gorm:"primary_key" json:"id"`
+	Username string    `json:"username" `
+	Password string    `json:"password"`
+	Account  string    `json:"account"`
+	CreateAt time.Time `json:"createAt"`
+	UpdateAt time.Time `json:"updateAt"`
 }
 
 // MergedBlogs 连表查询 IsShow为原字段,groupIsShow为输出字段

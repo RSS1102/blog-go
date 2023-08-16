@@ -35,6 +35,7 @@ func UpdateBlog(updates modelAdmin.BlogBlogs) int64 {
 		"Visitors": updates.Visitors,
 		"IsShow":   updates.IsShow,
 		"GroupId":  updates.GroupId,
+		"UpdateAt": time.Now(),
 	}
 	println(updateData)
 	// 移除未传入的字段
@@ -61,9 +62,16 @@ func UpdateBlog(updates modelAdmin.BlogBlogs) int64 {
 	return result.RowsAffected
 }
 
+// TempMergedBlogs 覆盖原有的createAt和updateAt的json字段
+type TempMergedBlogs struct {
+	*modelAdmin.MergedBlogs        // 嵌入原始结构体
+	CreatedAt               string `json:"createAt"`
+	UpdatedAt               string `json:"updateAt"`
+}
+
 // SelectBlog blog查询 分页
-func SelectBlog(Current int, pageSize int) (int, []modelAdmin.MergedBlogs) {
-	var blogBlogs []modelAdmin.MergedBlogs
+func SelectBlog(Current int, pageSize int) (int, []TempMergedBlogs) {
+	var blogBlogs []TempMergedBlogs
 	var total int64
 	err := Init.DB.Table("blog_blogs").Count(&total).Error
 	if err != nil {
@@ -76,6 +84,10 @@ func SelectBlog(Current int, pageSize int) (int, []modelAdmin.MergedBlogs) {
 		Limit(pageSize).Offset((Current - 1) * pageSize).Find(&blogBlogs)
 	if errs.Error != nil {
 		return 0, nil
+	}
+	for i := range blogBlogs {
+		blogBlogs[i].CreatedAt = blogBlogs[i].CreateAt.Format("2006-01-02 15:04:05")
+		blogBlogs[i].UpdatedAt = blogBlogs[i].UpdateAt.Format("2006-01-02 15:04:05")
 	}
 	return int(total), blogBlogs
 }

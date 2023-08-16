@@ -28,10 +28,10 @@ func CreateGroup(group string) int64 {
 func UpdateGroup(updates modelAdmin.BlogGroups) int64 {
 	// 更新记录的不固定字段
 	updateData := map[string]interface{}{
-		"Group":  updates.Group,
-		"IsShow": updates.IsShow,
+		"Group":    updates.Group,
+		"IsShow":   updates.IsShow,
+		"UpdateAt": time.Now(),
 	}
-	println(updateData)
 	// 移除未传入的字段
 	if updates.Group == "" {
 		delete(updateData, "Group")
@@ -41,18 +41,27 @@ func UpdateGroup(updates modelAdmin.BlogGroups) int64 {
 		Model(&modelAdmin.BlogGroups{}).
 		Where("id=?", updates.ID).
 		Updates(updateData)
-	
+
 	if result.Error != nil {
 		log.Println("UpdateGroup group fail : ", result)
 	}
 	return result.RowsAffected
 }
 
+// TempBlogGroup 覆盖原有的createAt和updateAt的json字段
+type TempBlogGroup struct {
+	*modelAdmin.BlogGroups        // 嵌入原始结构体
+	CreatedAt              string `json:"createAt"`
+	UpdatedAt              string `json:"updateAt"`
+}
+
 // SelectGroup 分组查询
 // 第几页
-func SelectGroup(Current int, pageSize int) (int, []modelAdmin.BlogGroups) {
-	var blogGroups []modelAdmin.BlogGroups
+func SelectGroup(Current int, pageSize int) (int, []TempBlogGroup) {
+
+	var blogGroups []TempBlogGroup
 	var total int64
+
 	err := Init.DB.Table("blog_groups").Count(&total).Error
 	if err != nil {
 		log.Println("Failed to get total record count:", err)
@@ -63,11 +72,23 @@ func SelectGroup(Current int, pageSize int) (int, []modelAdmin.BlogGroups) {
 		if errs.Error != nil {
 			return 0, nil
 		}
+		for i := range blogGroups {
+			blogGroups[i].CreatedAt = blogGroups[i].CreateAt.Format("2006-01-02 15:04:05")
+			blogGroups[i].UpdatedAt = blogGroups[i].UpdateAt.Format("2006-01-02 15:04:05")
+		}
 		return int(total), blogGroups
 	}
 	errs := Init.DB.Table("blog_groups").Limit(pageSize).Offset((Current - 1) * pageSize).Find(&blogGroups)
+	// 格式化每个 BlogGroup 的 CreatedAt 字段
+
+	for i := range blogGroups {
+		blogGroups[i].CreatedAt = blogGroups[i].CreateAt.Format("2006-01-02 15:04:05")
+		blogGroups[i].UpdatedAt = blogGroups[i].UpdateAt.Format("2006-01-02 15:04:05")
+	}
+
 	if errs.Error != nil {
 		log.Println("SelectContent group fail : ", err)
 	}
+	println(blogGroups)
 	return int(total), blogGroups
 }
