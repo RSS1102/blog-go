@@ -61,7 +61,7 @@ func UpdateGroup(context *gin.Context) {
 	}
 }
 
-func SelectGroup(context *gin.Context) {
+func SelectGroupLimit(context *gin.Context) {
 	var page modelPublic.Page
 	err := context.ShouldBindJSON(&page)
 	if err != nil {
@@ -74,7 +74,7 @@ func SelectGroup(context *gin.Context) {
 		return
 	}
 	println(page.Current, page.PageSize)
-	total, data := servicesAdmin.SelectGroup(page.Current, page.PageSize)
+	total, data := servicesAdmin.SelectGroupLimit(page.Current, page.PageSize)
 	if total > 0 {
 		context.JSON(http.StatusOK, gin.H{
 			"code":    200,

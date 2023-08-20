@@ -63,6 +63,38 @@ func UpdateBlog(context *gin.Context) {
 }
 
 func SelectBlog(context *gin.Context) {
+	type Data struct {
+		ID int `json:"id"`
+	}
+	var data Data
+	err := context.ShouldBindJSON(&data)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": err.Error(),
+			"data":    make([]int, 0),
+			"total":   0,
+		})
+		return
+	}
+
+	blogs, err := servicesAdmin.SelectBlog(data.ID)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "查询失败",
+			"data":    blogs,
+		})
+	} else {
+		context.JSON(http.StatusOK, gin.H{
+			"code":    200,
+			"message": "查询成功",
+			"data":    blogs,
+		})
+	}
+}
+
+func SelectBlogLimit(context *gin.Context) {
 	var page modelPublic.Page
 	err := context.ShouldBindJSON(&page)
 	if err != nil {
@@ -75,7 +107,7 @@ func SelectBlog(context *gin.Context) {
 		return
 	}
 	println(page.Current, page.PageSize)
-	total, blogs := servicesAdmin.SelectBlog(page.Current, page.PageSize)
+	total, blogs := servicesAdmin.SelectBlogLimit(page.Current, page.PageSize)
 	if total > 0 {
 		context.JSON(http.StatusOK, gin.H{
 			"code":    200,

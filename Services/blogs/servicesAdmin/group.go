@@ -7,6 +7,13 @@ import (
 	"time"
 )
 
+// TempBlogGroup 覆盖原有的createAt和updateAt的json字段
+type TempBlogGroup struct {
+	*modelAdmin.BlogGroups        // 嵌入原始结构体
+	CreatedAt              string `json:"createAt"`
+	UpdatedAt              string `json:"updateAt"`
+}
+
 // CreateGroup 创建分组
 func CreateGroup(group string) int64 {
 	var newGroup = modelAdmin.BlogGroups{
@@ -48,16 +55,9 @@ func UpdateGroup(updates modelAdmin.BlogGroups) int64 {
 	return result.RowsAffected
 }
 
-// TempBlogGroup 覆盖原有的createAt和updateAt的json字段
-type TempBlogGroup struct {
-	*modelAdmin.BlogGroups        // 嵌入原始结构体
-	CreatedAt              string `json:"createAt"`
-	UpdatedAt              string `json:"updateAt"`
-}
-
-// SelectGroup 分组查询
+// SelectGroupLimit 分组查询
 // 第几页
-func SelectGroup(Current int, pageSize int) (int, []TempBlogGroup) {
+func SelectGroupLimit(Current int, pageSize int) (int, []TempBlogGroup) {
 
 	var blogGroups []TempBlogGroup
 	var total int64
