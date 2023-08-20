@@ -15,15 +15,16 @@ type TempMergedBlogs struct {
 }
 
 // CreateBlog 创建内容
-func CreateBlog(groupId int, title, content string) int64 {
+func CreateBlog(groupId int, title, ContentMd string, ContentHtml string) int64 {
 	var newGroup = modelAdmin.BlogBlogs{
-		GroupId:  groupId,
-		Title:    title,
-		Content:  content,
-		Visitors: 0,
-		IsShow:   true,
-		CreateAt: time.Now(),
-		UpdateAt: time.Now(),
+		GroupId:     groupId,
+		Title:       title,
+		ContentHtml: ContentHtml,
+		ContentMd:   ContentMd,
+		Visitors:    0,
+		IsShow:      true,
+		CreateAt:    time.Now(),
+		UpdateAt:    time.Now(),
 	}
 	result := Init.DB.Table("blog_blogs").Create(&newGroup)
 	println(result)
@@ -37,20 +38,24 @@ func CreateBlog(groupId int, title, content string) int64 {
 func UpdateBlog(updates modelAdmin.BlogBlogs) int64 {
 	// 更新记录的不固定字段
 	updateData := map[string]interface{}{
-		"Title":    updates.Title,
-		"Content":  updates.Content,
-		"Visitors": updates.Visitors,
-		"IsShow":   updates.IsShow,
-		"GroupId":  updates.GroupId,
-		"UpdateAt": time.Now(),
+		"Title":       updates.Title,
+		"ContentHtml": updates.ContentHtml,
+		"ContentMd":   updates.ContentMd,
+		"Visitors":    updates.Visitors,
+		"IsShow":      updates.IsShow,
+		"GroupId":     updates.GroupId,
+		"UpdateAt":    time.Now(),
 	}
 	println(updateData)
 	// 移除未传入的字段
 	if updates.Title == "" {
 		delete(updateData, "Title")
 	}
-	if updates.Content == "" {
-		delete(updateData, "Content")
+	if updates.ContentHtml == "" {
+		delete(updateData, "ContentHtml")
+	}
+	if updates.ContentMd == "" {
+		delete(updateData, "ContentMd")
 	}
 	if updates.Visitors == 0 {
 		delete(updateData, "Visitors")
@@ -75,7 +80,7 @@ func SelectBlog(id int) (TempMergedBlogs, error) {
 	err := Init.DB.Table("blog_blogs").
 		Where("blog_blogs.id=?", id).
 		Joins(" JOIN blog_groups ON blog_blogs.group_id = blog_groups.id").
-		Select("blog_blogs.id ,blog_blogs.title,blog_blogs.content,blog_blogs.visitors,blog_blogs.is_show, blog_blogs.create_at,blog_blogs.update_at," +
+		Select("blog_blogs.id ,blog_blogs.title,blog_blogs.content_html,blog_blogs.content_md,blog_blogs.visitors,blog_blogs.is_show, blog_blogs.create_at,blog_blogs.update_at," +
 			"blog_groups.group, blog_groups.is_show as groups_is_show ").
 		First(&blogBlogs)
 	if err.Error != nil {

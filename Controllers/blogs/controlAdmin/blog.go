@@ -18,8 +18,9 @@ func CreateBlog(context *gin.Context) {
 		})
 		return
 	}
-
-	res := servicesAdmin.CreateBlog(data.GroupId, data.Title, data.Content)
+	println("ContentMd")
+	println(data.ContentMd)
+	res := servicesAdmin.CreateBlog(data.GroupId, data.Title, data.ContentMd, data.ContentHtml)
 	if res > 0 {
 		context.JSON(http.StatusOK, gin.H{
 			"code":    200,
