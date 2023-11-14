@@ -10,6 +10,7 @@ import (
 // TempBlogGroup 覆盖原有的createAt和updateAt的json字段
 type TempBlogGroup struct {
 	*modelAdmin.BlogGroups        // 嵌入原始结构体
+	BlogBlogsCount         int64  `json:"blogBlogsCount"`
 	CreatedAt              string `json:"createAt"`
 	UpdatedAt              string `json:"updateAt"`
 }
@@ -78,9 +79,13 @@ func SelectGroupLimit(Current int, pageSize int) (int, []TempBlogGroup) {
 		}
 		return int(total), blogGroups
 	}
-	errs := Init.DB.Table("blog_groups").Limit(pageSize).Offset((Current - 1) * pageSize).Find(&blogGroups)
+	errs := Init.DB.Table("blog_groups").
+		Joins("JOIN blog_blogs ON blog_blogs.group_id = blog_groups.id").
+		Select("blog_groups.*, COUNT(blog_blogs.id) as blog_blogs_count").
+		Group("blog_groups.id").
+		Find(&blogGroups).
+		Limit(pageSize).Offset((Current - 1) * pageSize)
 	// 格式化每个 BlogGroup 的 CreatedAt 字段
-
 	for i := range blogGroups {
 		blogGroups[i].CreatedAt = blogGroups[i].CreateAt.Format("2006-01-02 15:04:05")
 		blogGroups[i].UpdatedAt = blogGroups[i].UpdateAt.Format("2006-01-02 15:04:05")
